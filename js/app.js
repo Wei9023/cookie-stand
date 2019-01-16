@@ -41,7 +41,7 @@ function makeHeaderRow() {
         trEl.appendChild(thEl);
     };
     var thEl = document.createElement('th');
-    thEl.textContent = 'Total';
+    thEl.textContent = 'Daily Location totals';
     trEl.appendChild(thEl);
     saleTable.appendChild(trEl);
     console.log(trEl);
@@ -127,11 +127,12 @@ function cookiesDailyAllLocations() {
 //  cookiesHourly[] column:  1pm 2pm 3pm 4pm 
 
 function calculateTotalAndRenderIt() {
-
+    var totalOfAll = 0;
     var tmpArray = new Array(allLocations[0].cookiesHourly.length).fill(0);
     for(var i = 0; i < allLocations.length; i++){
         for(var j = 0; j< allLocations[i].cookiesHourly.length; j++){
             tmpArray[j] += allLocations[i].cookiesHourly[j];
+            totalOfAll += allLocations[i].cookiesHourly[j];
         }
     }
 
@@ -148,8 +149,13 @@ function calculateTotalAndRenderIt() {
         
         // alert(4);
     } 
-    saleTable.appendChild(trEl); 
 
+
+    var thTotal = document.createElement('th');
+    thTotal.textContent = totalOfAll;
+    trEl.appendChild(thTotal);
+
+    saleTable.appendChild(trEl); 
 }
 
 
