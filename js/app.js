@@ -1,179 +1,167 @@
 var hours = [ '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm','8pm' ];
 
-var pikeTr = document.getElementById("pikeNum");
-var stacTr = document.getElementById("stacNum");
-var centerTr = document.getElementById("centerNum");
-var chillTr = document.getElementById("hillNum");
-var alkiTr = document.getElementById("alkiNum");
+var allLocations = [];
 
-var salePike = {
-    minCust : 23,
-    maxCust: 65,
-    aveCust: 6.3,
+var saleTable = document.getElementById('table');
+
+function Sale(name, mingenerateCustomersEachHour, maxgenerateCustomersEachHour, avgCookiesPerCustomer){
+    this.name = name;
+    this.mingenerateCustomersEachHour = mingenerateCustomersEachHour;
+    this.maxgenerateCustomersEachHour = maxgenerateCustomersEachHour;
+    this.avgCookiesPerCustomer = avgCookiesPerCustomer;
+    this.customersHourly= [];
+    this.cookiesHourly=[];
+    this.totalDailyCookies=0;
+    allLocations.push(this);
+    }
+
+//creat sale instance
+new Sale('1st and Pike',23, 65, 6.3);
+new Sale('SeaTac Airport',3, 24, 1.2);
+new Sale('Seattle Center',11, 38, 3.7);
+new Sale('Capitol Hill',20, 38, 2.3);
+new Sale('Alki',2, 16, 4.6);
+
+
     
-    randomDataSet: function (dataSize, min, max) {
-        // dataSize = hours.length;
-        return new Array(dataSize).fill(0).map(function(n) {
-            return Math.floor(Math.random() * (max - min) + min);
-        });
-      },
+console.table(allLocations);
 
-    render : function (randomDataSet){
-        for (var i = 0; i < hours.length ; i ++){
-            var tdEl = document.createElement('td');
-            console.log('just create tdEl', tdEl);
-            tdEl.textContent = `${Math.round(randomDataSet[i] * 6.3)}`;
-            pikeNum.appendChild(tdEl);
-            console.log(pikeNum);
-        }
-    },
+// We need a separate function to make the table header
 
-    total : function (randomDataSet){
-        var a = 0;
-        for (var i=0; i< randomDataSet.length; i ++){
-            a += randomDataSet[i]*6.3;
-  
-        }
-        var tdEl = document.createElement('td');
-        tdEl.textContent = `${Math.round(a)}`;
-        pikeNum.appendChild(tdEl);   
-    },
+function makeHeaderRow() {
+    var trEl = document.createElement("tr");
+    var thEl = document.createElement('th');
+    thEl.textContent = ' ';
+    trEl.appendChild(thEl);
+    
+    for (var i=0; i< hours.length; i++){
+        //create, content, append
+        thEl = document.createElement('th');
+        thEl.textContent = hours[i];
+        trEl.appendChild(thEl);
+    };
+    var thEl = document.createElement('th');
+    thEl.textContent = 'Total';
+    trEl.appendChild(thEl);
+    saleTable.appendChild(trEl);
+    console.log(trEl);
 };
 
-var saleStac = {
-    minCust : 3,
-    maxCust: 24,
-    aveCust: 1.2,
-    randomDataSet: function (dataSize, min, max) {
-        dataSize = hours.length;
-        return new Array(dataSize).fill(0).map(function(n) {
-            return Math.floor(Math.random() * (max - min) + min);
-        });
-      },
+function generateRandomCustomers(min, max) {
+    return Math.floor(Math.random() * (max - min +1)) + min;
+}
 
-    render : function (randomDataSet){
-        for (var i = 0; i < hours.length ; i ++){
-            var tdEl = document.createElement('td');
-            tdEl.textContent = `${Math.round(randomDataSet[i] * 6.3)}`;
-            stacNum.appendChild(tdEl);  
-        }
-    },
-    total : function (randomDataSet){
-        var a = 0;
-        for (var i=0; i< randomDataSet.length; i ++){
-            a += Math.round(randomDataSet[i] * 6.3);
-            console.log(a);
-        }
+Sale.prototype.generateCustomersEachHour = function(){
+    for (var i=0; i< hours.length; i++){
+        var oneHourCustomers = generateRandomCustomers(this.mingenerateCustomersEachHour, this.maxgenerateCustomersEachHour);
+        this.customersHourly.push(oneHourCustomers);
+    }
+}
+
+Sale.prototype.calcCookiesEachHour = function(){
+    for (var i=0; i< hours.length; i++){
+        var oneHourCookies= parseInt(this.customersHourly[i]) * parseInt(this.avgCookiesPerCustomer);
+        this.cookiesHourly.push(oneHourCookies);
+        console.log(this.cookiesHourly);
+    }
+}
+
+Sale.prototype.dailyCookies = function() {
+    var cookiesPerHour = 0;
+    for(var i=0; i < this.cookiesHourly.length; i++){   
+       cookiesPerHour += parseInt(this.cookiesHourly[i]);
+    }
+    this.totalDailyCookies = cookiesPerHour;
+       console.log(this.totalDailyCookies);
+}
+
+Sale.prototype.render = function (){
+    //create, content, append for "min"
+    
+    var trEl = document.createElement('tr');
+    var thEl = document.createElement('th');        
+    thEl.textContent = this.name;
+    trEl.appendChild(thEl);  
+    for(var j=0; j< this.cookiesHourly.length; j++){
         var tdEl = document.createElement('td');
-        tdEl.textContent = `${a}`;
-        stacNum.appendChild(tdEl)
-    },    
+        //alert(3);
+        tdEl.textContent = this.cookiesHourly[j];
+        trEl.appendChild(tdEl);
+        // alert(4);
+    }  
+    
+    var thEl = document.createElement('th');        
+    thEl.textContent = this.totalDailyCookies;
+    trEl.appendChild(thEl);  
+
+    saleTable.appendChild(trEl); 
+    // alert(this.mingenerateCustomersEachHour);
+    console.log(trEl);
 };
+    
 
-var saleScenter = {
-    minCust : 11,
-    maxCust: 38,
-    aveCust: 3.7,
-    randomDataSet: function (dataSize, min, max) {
-        dataSize = hours.length;
-        return new Array(dataSize).fill(0).map(function(n) {
-            return Math.floor(Math.random() * (max - min) + min);
-        });
-      },
 
-    render : function (randomDataSet){
-        for (var i = 0; i < hours.length ; i ++){
-            var tdEl = document.createElement('td');
-            tdEl.textContent = `${Math.round(randomDataSet[i] * 6.3)}`;
-            centerNum.appendChild(tdEl);
-        }
-    },
-    total : function (randomDataSet){
-        var a = 0;
-        for (var i=0; i< randomDataSet.length; i ++){
-            a += Math.round(randomDataSet[i] * 6.3);
-        }
-        var tdEl = document.createElement('td');
-        tdEl.textContent = `${a}`;
-        centerNum.appendChild(tdEl);
-    }, 
+function renderAllLocations() {
+    for(var i =0; i < allLocations.length; i ++){
+        allLocations[i].render(); 
+    }
+}
+function generateCustomersEachHourAllLocations() {
+    for(var i =0; i < allLocations.length; i ++){
+        allLocations[i].generateCustomersEachHour();
+    }
 }
 
-var saleCHill = {
-    minCust : 20,
-    maxCust: 38,
-    aveCust: 2.3,
-    randomDataSet: function (dataSize, min, max) {
-        dataSize = hours.length;
-        return new Array(dataSize).fill(0).map(function(n) {
-            return Math.floor(Math.random() * (max - min) + min);
-        });
-      },
-
-    render : function (randomDataSet){
-        for (var i = 0; i < hours.length ; i ++){
-            var tdEl = document.createElement('td');   
-            tdEl.textContent = `${Math.round(randomDataSet[i] * 6.3)}`;
-            hillNum.appendChild(tdEl);    
-        }
-    },
-    total : function (randomDataSet){
-        var a = 0;
-        for (var i=0; i< randomDataSet.length; i ++){
-            a += Math.round(randomDataSet[i]*6.3);
-        }
-        var tdEl = document.createElement('td');
-        tdEl.textContent = `${a}`;
-        hillNum.appendChild(tdEl);
-    }, 
-   
+function calcCookiesEachHourAllLocations() {
+    for(var i =0; i < allLocations.length; i ++){
+        allLocations[i].calcCookiesEachHour();
+    }
 }
 
-var saleAlki = {
-    minCust : 2,
-    maxCust: 16,
-    aveCust: 4.6,
-    randomDataSet: function (dataSize, min, max) {
-        dataSize = hours.length;
-        return new Array(dataSize).fill(0).map(function(n) {
-            return Math.floor(Math.random() * (max - min) + min);
-        });
-      },
+function cookiesDailyAllLocations() {
+    for(var i =0; i < allLocations.length; i ++){
+        allLocations[i].dailyCookies();
+    }
+}
+//   allLocations row
+//  cookiesHourly[] column:  1pm 2pm 3pm 4pm 
 
-    render : function (randomDataSet){
-        for (var i = 0; i < hours.length ; i ++){
-            var tdEl = document.createElement('td');
-            tdEl.textContent = `${Math.round(randomDataSet[i] * 6.3)}`;
-            alkiNum.appendChild(tdEl);
+function calculateTotalAndRenderIt() {
+
+    var tmpArray = new Array(allLocations[0].cookiesHourly.length).fill(0);
+    for(var i = 0; i < allLocations.length; i++){
+        for(var j = 0; j< allLocations[i].cookiesHourly.length; j++){
+            tmpArray[j] += allLocations[i].cookiesHourly[j];
         }
-    },
-    total : function (randomDataSet){
-        var a = 0;
-        for (var i=0; i< randomDataSet.length; i ++){
-            a += Math.round(randomDataSet[i]*6.3);
-        }
+    }
+
+    var trEl = document.createElement('tr');
+    var thEl = document.createElement('th');        
+    thEl.textContent = "Total";
+    trEl.appendChild(thEl);  
+
+    for(var j=0; j< allLocations[0].cookiesHourly.length; j++){
+
         var tdEl = document.createElement('td');
-        tdEl.textContent = `${a}`;
-        alkiNum.appendChild(tdEl);
-    }, 
+        tdEl.textContent = tmpArray[j];
+        trEl.appendChild(tdEl);
+        
+        // alert(4);
+    } 
+    saleTable.appendChild(trEl); 
+
 }
 
-var randomArrPike = (salePike.randomDataSet(hours.length,salePike.minCust, salePike.maxCust));
-salePike.render(randomArrPike);
-salePike.total(randomArrPike);
 
-var randomArrStac = (saleStac.randomDataSet(hours.length,saleStac.minCust, saleStac.maxCust));
-saleStac.render(randomArrStac);
-saleStac.total(randomArrStac);
+//totalDailyCookies();
+makeHeaderRow();
+generateRandomCustomers();
+generateCustomersEachHourAllLocations();
+calcCookiesEachHourAllLocations();
+cookiesDailyAllLocations();
+renderAllLocations();
 
-var randomArrCen = (salePike.randomDataSet(hours.length,saleScenter.minCust, saleScenter.maxCust));
-saleScenter.render(randomArrCen);
-saleScenter.total(randomArrCen);
+calculateTotalAndRenderIt();
 
-var randomArrHill = (saleCHill.randomDataSet(hours.length,saleCHill.minCust, saleCHill.maxCust));
-saleCHill.render(randomArrHill);
-saleCHill.total(randomArrHill);
 
-var randomArrAlki = (saleAlki.randomDataSet(hours.length,saleAlki.minCust, saleAlki.maxCust));
-saleAlki.render(randomArrAlki);
-saleAlki.total(randomArrAlki);
+
