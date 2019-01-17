@@ -13,56 +13,32 @@
 
 <body class="container_12">
     <h1>Sales Data for locations</h1>
-    <!-- <h2>1st and Pike</h2>
-    <ul id="pike"></ul>
-        <h2>Seatac Airport</h2>
-    <ul id="airport"></ul>
-        <h2>Seattle Center</h2>
-    <ul id="center"></ul>
-        <h2>Capitol Hill</h2>
-    <ul id="hill"></ul>
-        <h2>Alki</h2>
-    <ul id="beach"></ul> -->
+    <form id="sales-form">
+        <fieldset>
+            <legend>Location and Data submission form</legend>
 
+            <label for="where">Where: </label>
+            <input name="where" type="text" required="required"/>
 
-  <table class="container_12" id="table" >
-      <!-- <tr>
-          <th></th>
-          <th scope='col'>6am</th>
-          <th scope='col'>7am</th>
-          <th scope='col'>8am</th>
-          <th scope='col'>9am</th>
-          <th scope='col'>10am</th>
-          <th scope='col'>11am</th>
-          <th scope='col'>12pm</th>
-          <th scope='col'>1pm</th>
-          <th scope='col'>2pm</th>
-          <th scope='col'>3pm</th>
-          <th scope='col'>4pm</th>
-          <th scope='col'>5pm</th>
-          <th scope='col'>6pm</th>
-          <th scope='col'>7pm</th>
-          <th scope='col'>8pm</th>
-          <th scope='col'>Total</th> -->
-      <!-- </tr>
-      <tr id="pikeNum">
-          <th scope="row">1st and Pike</th>
-      </tr>
-      <tr id="stacNum">
-        <th scope="row">Seatac airport</th>
-      </tr>
-      <tr id="centerNum">
-        <th scope="row">Seattle center</th>
-      </tr>
-      <tr id="hillNum">
-        <th scope="row">Capitol hill</th>
-      </tr>
-      <tr id="alkiNum">
-        <th scope="row">Alki</th>
-      </tr> -->
+            
 
+            <lable for="minCustomersHourly">Min customers per hour: </lable>
+            <input name="minCustomersHourly" type="number" required="required"/>
 
-  </table>
+            <lable for="maxCustomersHourly">Max customers per hour: </lable>
+            <input name="maxCustomersHourly" type="number" required="required"/>
+
+            <lable for="avgCustomersHourly">Average customers per hour: </lable>
+            <input name="avgCustomersHourly" type="number" required="required"/>
+
+            <button type="submit">Submit</button>
+        </fieldset>
+        
+    </form>
+
+    <table class="container_12" id="table" >
+
+    </table>
 
   <script src="js/app.js"></script>
 </body>
